@@ -1,5 +1,6 @@
 package backend.challenge.modules.task.infra.http.controllers;
 
+import backend.challenge.modules.task.dtos.TaskDtoFactory;
 import backend.challenge.modules.task.infra.http.views.TaskView;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.services.*;
@@ -7,6 +8,7 @@ import kikaha.urouting.api.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.net.http.HttpRequest;
 
 @Singleton
 @Path("tasks")
@@ -49,8 +51,14 @@ public class TaskController {
 	@POST
 	public Response create(TaskView task) {
 		// TODO: A rota deve receber title e description, sendo o `title` o título da tarefa e `description` uma descrição da tarefa.
-
-		return DefaultResponse.ok().entity("Hello world");
+        Task createdTask = null;
+		try {
+			createdTask = createTaskService.execute(new TaskDtoFactory().build(task.getTitle(), task.getDescription()));
+        } catch (CreateTaskException e) {
+			DefaultResponse.badRequest().entity(e.getMessage());
+            throw new RuntimeException(e);
+        }
+		return DefaultResponse.ok().entity(createdTask);
 	}
 
 	@PUT

@@ -2,12 +2,17 @@ package backend.challenge.modules.task.repositories;
 
 import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.models.Task;
+import backend.challenge.modules.task.models.TaskFactory;
+import backend.challenge.modules.task.services.CreateTaskException;
 
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class TaskRepository implements ITaskRepository {
+
+	List<Task> taskList = new ArrayList<>();
 
 	@Override
 	public Task index(final Long taskId) {
@@ -24,10 +29,12 @@ public class TaskRepository implements ITaskRepository {
 	}
 
 	@Override
-	public Task create(final TaskDTO taskDTO) {
+	public Task create(final TaskDTO taskDTO) throws CreateTaskException {
 		// TODO: Criar método responsável por criar uma tarefa
-
-		return null;
+		validate(taskDTO);
+		Task task = new TaskFactory().build(taskDTO);
+		taskList.add(task);
+		return task;
 	}
 
 	@Override
@@ -43,4 +50,9 @@ public class TaskRepository implements ITaskRepository {
 
 	}
 
+	private static void validate(TaskDTO taskDTO) throws CreateTaskException {
+		if (taskDTO.getTitle().trim().isEmpty()) {
+			throw new CreateTaskException("Title cannot be empty");
+		}
+	}
 }

@@ -18,10 +18,8 @@ public class CreateTaskService implements ICreateTaskService {
 	}
 
 	@Override
-	public Task execute(TaskDTO taskDTO) {
+	public Task execute(TaskDTO taskDTO) throws CreateTaskException {
 		// TODO: Criar serviço responsável por criar uma tarefa
-
-		return null;
+		return taskRepository.create(taskDTO);
 	}
-
 }
