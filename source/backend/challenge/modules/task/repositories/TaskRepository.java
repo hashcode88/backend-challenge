@@ -3,11 +3,13 @@ package backend.challenge.modules.task.repositories;
 import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.models.TaskFactory;
-import backend.challenge.modules.task.services.CreateTaskException;
+import backend.challenge.modules.task.services.exceptions.CreateTaskException;
+import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
 public class TaskRepository implements ITaskRepository {
@@ -15,10 +17,13 @@ public class TaskRepository implements ITaskRepository {
 	List<Task> taskList = new ArrayList<>();
 
 	@Override
-	public Task index(final Long taskId) {
+	public Task index(final Long taskId) throws RetriveTaskException {
 		// TODO: Criar método responsável por retornar tarefa por id
-
-		return null;
+		List<Task> retrivedtask = taskList.stream().filter(task -> task.getId().equals(taskId)).collect(Collectors.toList());
+		if (retrivedtask.isEmpty()) {
+			throw new RetriveTaskException("Tarefa não encontrada");
+		}
+		return retrivedtask.get(0);
 	}
 
 	@Override
@@ -52,7 +57,7 @@ public class TaskRepository implements ITaskRepository {
 
 	private static void validate(TaskDTO taskDTO) throws CreateTaskException {
 		if (taskDTO.getTitle().trim().isEmpty()) {
-			throw new CreateTaskException("Title cannot be empty");
+			throw new CreateTaskException("Titulo não pode ser vazio");
 		}
 	}
 }

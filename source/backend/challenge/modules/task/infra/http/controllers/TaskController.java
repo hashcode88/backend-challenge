@@ -4,11 +4,12 @@ import backend.challenge.modules.task.dtos.TaskDtoFactory;
 import backend.challenge.modules.task.infra.http.views.TaskView;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.services.*;
+import backend.challenge.modules.task.services.exceptions.CreateTaskException;
+import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 import kikaha.urouting.api.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.net.http.HttpRequest;
 
 @Singleton
 @Path("tasks")
@@ -24,12 +25,13 @@ public class TaskController {
 	public TaskController(
 		final ICreateTaskService createTaskService,
 		final IDeleteTaskService deleteTaskService,
-		final IRetrieveAllTasksService retrieveAllTasksService
+		final IRetrieveAllTasksService retrieveAllTasksService,
+		final IRetrieveTaskByIdService retrieveTaskByIdService
 	) {
 		this.createTaskService = createTaskService;
 		this.deleteTaskService = deleteTaskService;
 		this.retrieveAllTasksService = retrieveAllTasksService;
-		this.retrieveTaskByIdService = null;
+		this.retrieveTaskByIdService = retrieveTaskByIdService;
 		this.updateTaskService = null;
 	}
 
@@ -44,8 +46,14 @@ public class TaskController {
 	@Path("single/{taskId}")
 	public Response index(@PathParam("taskId") Long taskId) {
 		// TODO: A rota deve retornar somente a tarefa a qual o id corresponder
-
-		return DefaultResponse.ok().entity("Hello world");
+		Task retrivedTask = null;
+		try {
+			retrivedTask = retrieveTaskByIdService.execute(taskId);
+        } catch (RetriveTaskException e) {
+			DefaultResponse.notFound().entity(e.getMessage());
+			throw new RuntimeException(e);
+        }
+        return DefaultResponse.ok().entity(retrivedTask);
 	}
 
 	@POST

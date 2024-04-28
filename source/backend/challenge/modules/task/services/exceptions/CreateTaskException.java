@@ -1,4 +1,4 @@
-package backend.challenge.modules.task.services;
+package backend.challenge.modules.task.services.exceptions;
 
 public class CreateTaskException extends Exception{
 

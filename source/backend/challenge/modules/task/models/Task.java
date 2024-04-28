@@ -1,6 +1,7 @@
 package backend.challenge.modules.task.models;
 
 import backend.challenge.modules.task.enums.TaskStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class Task {
 	private String description;
 	private int progress;
 	private TaskStatus status;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date createdAt;
 
 }

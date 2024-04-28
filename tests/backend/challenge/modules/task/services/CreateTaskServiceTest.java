@@ -4,6 +4,7 @@ import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.repositories.TaskRepository;
+import backend.challenge.modules.task.services.exceptions.CreateTaskException;
 import kikaha.core.test.KikahaRunner;
 import org.junit.Assert;
 import org.junit.Before;
