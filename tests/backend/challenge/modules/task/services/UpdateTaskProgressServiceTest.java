@@ -129,5 +129,26 @@ public class UpdateTaskProgressServiceTest {
 		Assert.assertEquals(task.getProgress(), 0);
 	}
 
+	@Test
+	public void shouldNotBeAbleToUpdateTaskProgressWhenProgressGreaterThanOneHundred() {
+		/*
+			TODO: Para que esse teste passe, você não deve permitir
+			 que sua rota de update de progresso de tarefa altere o progresso para maior que 100.
+		*/
+		final Task updatedTaskWithZeroProgress = new Task();
+		updatedTaskWithZeroProgress.setId(TASK_ID);
+		updatedTaskWithZeroProgress.setTitle(TASk_TITLE);
+		updatedTaskWithZeroProgress.setDescription(TASk_DESCRIPTION);
+		updatedTaskWithZeroProgress.setProgress(100);
+		updatedTaskWithZeroProgress.setStatus(TASK_STATUS);
+		updatedTaskWithZeroProgress.setCreatedAt(CREATE_AT);
+
+		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
+		when(taskRepository.updateProgress(anyObject())).thenReturn(updatedTaskWithZeroProgress);
+		final int progress = 200;
+		DefaultResponse defaultResponse = updateTaskProgressService.execute(new TaskProgressDtoFactory().build(TASK_ID, progress));
+		Task task = (Task) defaultResponse.entity();
+		Assert.assertEquals(task.getProgress(), 100);
+	}
 
 }
