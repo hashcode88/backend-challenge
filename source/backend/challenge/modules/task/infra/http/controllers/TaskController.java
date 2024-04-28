@@ -26,13 +26,14 @@ public class TaskController {
 		final ICreateTaskService createTaskService,
 		final IDeleteTaskService deleteTaskService,
 		final IRetrieveAllTasksService retrieveAllTasksService,
-		final IRetrieveTaskByIdService retrieveTaskByIdService
+		final IRetrieveTaskByIdService retrieveTaskByIdService,
+		final IUpdateTaskService updateTaskService
 	) {
 		this.createTaskService = createTaskService;
 		this.deleteTaskService = deleteTaskService;
 		this.retrieveAllTasksService = retrieveAllTasksService;
 		this.retrieveTaskByIdService = retrieveTaskByIdService;
-		this.updateTaskService = null;
+		this.updateTaskService = updateTaskService;
 	}
 
 	@GET
@@ -75,9 +76,15 @@ public class TaskController {
 			TODO:  A rota deve alterar apenas o title e description da tarefa
 			 			 que possua o id igual ao id correspondente nos parâmetros da rota.
 		 */
-
-		return DefaultResponse.ok().entity("Hello world");
-	}
+		Task updatedTask = null;
+        try {
+			updatedTask = updateTaskService.execute(taskId, task);
+        } catch (RetriveTaskException e) {
+			DefaultResponse.badRequest().entity(e.getMessage());
+            throw new RuntimeException(e);
+        }
+		return DefaultResponse.ok().entity(updatedTask);
+    }
 
 	@DELETE
 	@Path("single/{taskId}")
