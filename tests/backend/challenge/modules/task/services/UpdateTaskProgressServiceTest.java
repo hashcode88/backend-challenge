@@ -1,7 +1,6 @@
 package backend.challenge.modules.task.services;
 
 
-import backend.challenge.modules.task.dtos.TaskProgressDTO;
 import backend.challenge.modules.task.dtos.TaskProgressDtoFactory;
 import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
@@ -32,9 +31,8 @@ public class UpdateTaskProgressServiceTest {
 
 	private final Task retrivedTask = new Task();
 	private final Task updatedTask = new Task();
-	private final Task completedTask = new Task();
 	private final Long TASK_ID = 8567032865818388301L;
-	private final int OLD_TASK_PROGRESS = 0;
+	private final int OLD_TASK_PROGRESS = 10;
 	private final TaskStatus TASK_STATUS = TaskStatus.PROGRESS;
 	private final Date CREATE_AT = new Date(2024, 4, 28);
 	private final String TASk_TITLE = "Projeto";
@@ -57,13 +55,6 @@ public class UpdateTaskProgressServiceTest {
 		updatedTask.setProgress(50);
 		updatedTask.setStatus(TASK_STATUS);
 		updatedTask.setCreatedAt(CREATE_AT);
-
-		completedTask.setId(TASK_ID);
-		completedTask.setTitle(TASk_TITLE);
-		completedTask.setDescription(TASk_DESCRIPTION);
-		completedTask.setProgress(100);
-		completedTask.setStatus(TaskStatus.COMPLETE);
-		completedTask.setCreatedAt(CREATE_AT);
 	}
 
 	@Test
@@ -86,6 +77,13 @@ public class UpdateTaskProgressServiceTest {
 			TODO:  Para que esse teste passe, sua aplicação deve permitir que sejam
 		         alterado apenas o campo `status`, quando o progresso for igual a 100.
 		*/
+		final Task completedTask = new Task();
+		completedTask.setId(TASK_ID);
+		completedTask.setTitle(TASk_TITLE);
+		completedTask.setDescription(TASk_DESCRIPTION);
+		completedTask.setProgress(100);
+		completedTask.setStatus(TaskStatus.COMPLETE);
+		completedTask.setCreatedAt(CREATE_AT);
 
 		final int progress = 100;
 		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
@@ -94,5 +92,42 @@ public class UpdateTaskProgressServiceTest {
 		Task task = (Task) defaultResponse.entity();
 		Assert.assertEquals(task.getStatus(), TaskStatus.COMPLETE);
 	}
+
+	@Test
+	public void shouldNotBeAbleToUpdateTaskProgressWhenProgressLessThanOneHundred() {
+		/*
+			TODO: Não deve ser capaz de atualizar o progresso da tarefa quando o progresso for inferior a cem.
+		*/
+
+		final int progress = 99;
+		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
+		when(taskRepository.updateProgress(anyObject())).thenReturn(updatedTask);
+		DefaultResponse defaultResponse = updateTaskProgressService.execute(new TaskProgressDtoFactory().build(TASK_ID, progress));
+		Task task = (Task) defaultResponse.entity();
+		Assert.assertNotEquals(task.getStatus(), TaskStatus.COMPLETE);
+	}
+
+	@Test
+	public void shouldNotBeAbleToUpdateTaskProgressWhenProgressLessThanZero() {
+		/*
+			TODO: Para que esse teste passe, você não deve permitir
+			 que sua rota de update de progresso de tarefa altere o progresso para menor que 0.
+		*/
+		final Task updatedTaskWithZeroProgress = new Task();
+		updatedTaskWithZeroProgress.setId(TASK_ID);
+		updatedTaskWithZeroProgress.setTitle(TASk_TITLE);
+		updatedTaskWithZeroProgress.setDescription(TASk_DESCRIPTION);
+		updatedTaskWithZeroProgress.setProgress(0);
+		updatedTaskWithZeroProgress.setStatus(TASK_STATUS);
+		updatedTaskWithZeroProgress.setCreatedAt(CREATE_AT);
+
+		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
+		when(taskRepository.updateProgress(anyObject())).thenReturn(updatedTaskWithZeroProgress);
+		final int progress = -3;
+		DefaultResponse defaultResponse = updateTaskProgressService.execute(new TaskProgressDtoFactory().build(TASK_ID, progress));
+		Task task = (Task) defaultResponse.entity();
+		Assert.assertEquals(task.getProgress(), 0);
+	}
+
 
 }

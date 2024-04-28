@@ -14,6 +14,7 @@ public class UpdateTaskProgressService implements IUpdateTaskProgressService{
 
     private final ITaskRepository taskRepository;
     private int LIMIT_PROGRESS = 100;
+    private int INITIAL_PROGRESS = 0;
 
     @Inject
     public UpdateTaskProgressService(ITaskRepository taskRepository) {
@@ -26,11 +27,28 @@ public class UpdateTaskProgressService implements IUpdateTaskProgressService{
         if(retrivedTask == null) {
             return DefaultResponse.notFound().statusCode(404);
         }
-        if(taskProgressDTO.getProgress() == LIMIT_PROGRESS) {
-            retrivedTask.setStatus(TaskStatus.COMPLETE);
-        }
-        retrivedTask.setProgress(taskProgressDTO.getProgress());
+        this.changeProgress(retrivedTask, taskProgressDTO.getProgress());
+        this.changeStatus(retrivedTask, taskProgressDTO.getProgress());
         Task updatedTask = taskRepository.updateProgress(retrivedTask);
         return DefaultResponse.ok().entity(updatedTask);
+    }
+
+    private void changeProgress(Task task, int progress) {
+        int taskProgress = 0;
+        if (progress > INITIAL_PROGRESS) {
+            taskProgress = progress;
+        }
+        if (progress > LIMIT_PROGRESS) {
+            taskProgress = LIMIT_PROGRESS;
+        }
+        task.setProgress(taskProgress);
+    }
+
+    private void changeStatus(Task task, int progress) {
+        if(progress == LIMIT_PROGRESS) {
+            task.setStatus(TaskStatus.COMPLETE);
+        }else {
+            task.setStatus(TaskStatus.PROGRESS);
+        }
     }
 }
