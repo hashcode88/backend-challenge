@@ -58,6 +58,7 @@ public class TaskRepository implements ITaskRepository {
 		taskList.forEach(rawTask -> {
 			if (rawTask.getId().equals(task.getId())){
 				rawTask.setProgress(task.getProgress());
+				rawTask.setStatus(task.getStatus());
 			}
 		});
 		return task;

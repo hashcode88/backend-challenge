@@ -1,6 +1,7 @@
 package backend.challenge.modules.task.services;
 
 import backend.challenge.modules.task.dtos.TaskProgressDTO;
+import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import kikaha.urouting.api.DefaultResponse;
@@ -12,6 +13,7 @@ import javax.inject.Singleton;
 public class UpdateTaskProgressService implements IUpdateTaskProgressService{
 
     private final ITaskRepository taskRepository;
+    private int LIMIT_PROGRESS = 100;
 
     @Inject
     public UpdateTaskProgressService(ITaskRepository taskRepository) {
@@ -23,6 +25,9 @@ public class UpdateTaskProgressService implements IUpdateTaskProgressService{
         final Task retrivedTask = taskRepository.index(taskProgressDTO.getId());
         if(retrivedTask == null) {
             return DefaultResponse.notFound().statusCode(404);
+        }
+        if(taskProgressDTO.getProgress() == LIMIT_PROGRESS) {
+            retrivedTask.setStatus(TaskStatus.COMPLETE);
         }
         retrivedTask.setProgress(taskProgressDTO.getProgress());
         Task updatedTask = taskRepository.updateProgress(retrivedTask);

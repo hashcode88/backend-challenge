@@ -32,6 +32,7 @@ public class UpdateTaskProgressServiceTest {
 
 	private final Task retrivedTask = new Task();
 	private final Task updatedTask = new Task();
+	private final Task completedTask = new Task();
 	private final Long TASK_ID = 8567032865818388301L;
 	private final int OLD_TASK_PROGRESS = 0;
 	private final TaskStatus TASK_STATUS = TaskStatus.PROGRESS;
@@ -56,6 +57,13 @@ public class UpdateTaskProgressServiceTest {
 		updatedTask.setProgress(50);
 		updatedTask.setStatus(TASK_STATUS);
 		updatedTask.setCreatedAt(CREATE_AT);
+
+		completedTask.setId(TASK_ID);
+		completedTask.setTitle(TASk_TITLE);
+		completedTask.setDescription(TASk_DESCRIPTION);
+		completedTask.setProgress(100);
+		completedTask.setStatus(TaskStatus.COMPLETE);
+		completedTask.setCreatedAt(CREATE_AT);
 	}
 
 	@Test
@@ -78,6 +86,13 @@ public class UpdateTaskProgressServiceTest {
 			TODO:  Para que esse teste passe, sua aplicação deve permitir que sejam
 		         alterado apenas o campo `status`, quando o progresso for igual a 100.
 		*/
+
+		final int progress = 100;
+		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
+		when(taskRepository.updateProgress(anyObject())).thenReturn(completedTask);
+		DefaultResponse defaultResponse = updateTaskProgressService.execute(new TaskProgressDtoFactory().build(TASK_ID, progress));
+		Task task = (Task) defaultResponse.entity();
+		Assert.assertEquals(task.getStatus(), TaskStatus.COMPLETE);
 	}
 
 }
