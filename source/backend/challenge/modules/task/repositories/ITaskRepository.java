@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ITaskRepository {
 
-	Task index(Long taskId) throws RetriveTaskException;
+	Task index(Long taskId);
 	List<Task> show();
 	Task create(TaskDTO taskDTO) throws CreateTaskException;
 	Task update(Task task);

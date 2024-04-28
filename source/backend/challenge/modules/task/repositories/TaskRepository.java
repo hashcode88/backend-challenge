@@ -17,13 +17,14 @@ public class TaskRepository implements ITaskRepository {
 	List<Task> taskList = new ArrayList<>();
 
 	@Override
-	public Task index(final Long taskId) throws RetriveTaskException {
+	public Task index(final Long taskId){
 		// TODO: Criar método responsável por retornar tarefa por id
 		List<Task> retrivedtask = taskList.stream().filter(task -> task.getId().equals(taskId)).collect(Collectors.toList());
-		if (retrivedtask.isEmpty()) {
-			throw new RetriveTaskException("Tarefa não encontrada");
+		Task task = null;
+		if (!retrivedtask.isEmpty()) {
+			task = retrivedtask.get(0);
 		}
-		return retrivedtask.get(0);
+		return task;
 	}
 
 	@Override

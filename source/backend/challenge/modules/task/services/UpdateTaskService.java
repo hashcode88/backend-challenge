@@ -3,6 +3,7 @@ package backend.challenge.modules.task.services;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
+import kikaha.urouting.api.DefaultResponse;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,10 +19,11 @@ public class UpdateTaskService implements IUpdateTaskService {
     }
 
     @Override
-    public Task execute(Long taskId, Task task) throws RetriveTaskException {
+    public DefaultResponse execute(Long taskId, Task task) {
         final Task retrivedTask = taskRepository.index(taskId);
-        retrivedTask.setTitle(task.getTitle());
-        retrivedTask.setDescription(task.getDescription());
-        return taskRepository.update(retrivedTask);
+        if(retrivedTask == null) {
+            return DefaultResponse.notFound().statusCode(404);
+        }
+        return DefaultResponse.ok().entity(taskRepository.update(retrivedTask));
     }
 }

@@ -4,8 +4,10 @@ import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.repositories.TaskRepository;
+import backend.challenge.modules.task.services.exceptions.CreateTaskException;
 import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 import kikaha.core.test.KikahaRunner;
+import kikaha.urouting.api.DefaultResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -16,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
@@ -62,14 +65,15 @@ public class UpdateTaskServiceTest {
 	}
 
 	@Test
-	public void shouldBeAbleToUpdateTask() throws RetriveTaskException {
+	public void shouldBeAbleToUpdateTask() {
 		/*
 			TODO:  Para que esse teste passe, sua aplicação deve permitir que sejam
 		         alterados apenas os campos `title` e `observation`.
 		*/
 		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
 		when(taskRepository.update(anyObject())).thenReturn(updatedTask);
-		final Task task = updateTaskService.execute(TASK_ID, taskChanges);
+		final DefaultResponse defaultResponse = updateTaskService.execute(TASK_ID, taskChanges);
+		final Task task = (Task) defaultResponse.entity();
 		Assert.assertEquals(task.getId(), retrivedTask.getId());
 		Assert.assertEquals(task.getProgress(), retrivedTask.getProgress());
 		Assert.assertEquals(task.getStatus(), retrivedTask.getStatus());
@@ -85,6 +89,9 @@ public class UpdateTaskServiceTest {
 			TODO: Para que esse teste passe, você deve validar na sua rota de update se
 			 			o id da tarefa enviada pela url existe ou não. Caso não exista, retornar um erro com status 400.
 		*/
+		final DefaultResponse defaultResponse = updateTaskService.execute(5101162744757410452L, taskChanges);
+		DefaultResponse expectedResponse = DefaultResponse.notFound().statusCode(404);
+		Assert.assertEquals(expectedResponse.statusCode(), defaultResponse.statusCode());
 	}
 
 	@Test

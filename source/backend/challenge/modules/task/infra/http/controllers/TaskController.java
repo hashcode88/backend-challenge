@@ -46,13 +46,10 @@ public class TaskController {
 	@Path("single/{taskId}")
 	public Response index(@PathParam("taskId") Long taskId) {
 		// TODO: A rota deve retornar somente a tarefa a qual o id corresponder
-		Task retrivedTask = null;
-		try {
-			retrivedTask = retrieveTaskByIdService.execute(taskId);
-        } catch (RetriveTaskException e) {
-			DefaultResponse.notFound().entity(e.getMessage());
-			throw new RuntimeException(e);
-        }
+		Task retrivedTask = retrieveTaskByIdService.execute(taskId);
+		if(retrivedTask == null) {
+			return DefaultResponse.notFound().statusCode(404);
+		}
         return DefaultResponse.ok().entity(retrivedTask);
 	}
 
@@ -76,14 +73,7 @@ public class TaskController {
 			TODO:  A rota deve alterar apenas o title e description da tarefa
 			 			 que possua o id igual ao id correspondente nos parâmetros da rota.
 		 */
-		Task updatedTask = null;
-        try {
-			updatedTask = updateTaskService.execute(taskId, task);
-        } catch (RetriveTaskException e) {
-			DefaultResponse.badRequest().entity(e.getMessage());
-            throw new RuntimeException(e);
-        }
-		return DefaultResponse.ok().entity(updatedTask);
+		return updateTaskService.execute(taskId, task);
     }
 
 	@DELETE

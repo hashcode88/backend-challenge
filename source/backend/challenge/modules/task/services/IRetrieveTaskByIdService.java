@@ -5,6 +5,6 @@ import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 
 public interface IRetrieveTaskByIdService {
 
-	Task execute(Long taskId) throws RetriveTaskException;
+	Task execute(Long taskId);
 
 }

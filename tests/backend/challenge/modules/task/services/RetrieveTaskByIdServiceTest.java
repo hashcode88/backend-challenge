@@ -41,7 +41,7 @@ public class RetrieveTaskByIdServiceTest {
 	}
 
 	@Test
-	public void shouldBeAbleToListTheTaskById() throws RetriveTaskException {
+	public void shouldBeAbleToListTheTaskById(){
 		/*
 			TODO: Para que esse teste passe, sua aplicação deve permitir que seja
 			 			retornado uma tarefa com o mesmo id informado.

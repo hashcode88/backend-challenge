@@ -18,7 +18,7 @@ public class RetriveTaskByIdService implements IRetrieveTaskByIdService {
     }
 
     @Override
-    public Task execute(Long taskId) throws RetriveTaskException {
+    public Task execute(Long taskId) {
         return taskRepository.index(taskId);
     }
 }
