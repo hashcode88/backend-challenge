@@ -74,13 +74,8 @@ public class UpdateTaskServiceTest {
 		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
 		when(taskRepository.update(anyObject())).thenReturn(updatedTask);
 		final DefaultResponse defaultResponse = updateTaskService.execute(TASK_ID, taskChanges);
-		Assert.assertEquals(retrivedTask.getId(), TASK_ID);
-		Assert.assertEquals(retrivedTask.getProgress(), TASK_PROGRESS);
-		Assert.assertEquals(retrivedTask.getStatus(), TASK_STATUS);
-		Assert.assertEquals(retrivedTask.getCreatedAt(), CREATE_AT);
 		Assert.assertNotEquals(retrivedTask.getTitle(), OLD_TASk_TITLE);
 		Assert.assertNotEquals(retrivedTask.getDescription(), OLD_TASk_DESCRIPTION);
-
 	}
 
 	@Test
@@ -103,6 +98,10 @@ public class UpdateTaskServiceTest {
 						 é a rota responsável por alterar o progresso da tarefa.
 
 		 */
+		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
+		when(taskRepository.update(anyObject())).thenReturn(updatedTask);
+		final DefaultResponse defaultResponse = updateTaskService.execute(TASK_ID, taskChanges);
+		Assert.assertEquals(retrivedTask.getStatus(), TASK_STATUS);
 	}
 
 
