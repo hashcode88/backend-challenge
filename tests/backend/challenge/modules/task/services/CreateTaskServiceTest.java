@@ -50,7 +50,7 @@ public class CreateTaskServiceTest {
 		Exception exception = assertThrows(CreateTaskException.class, () ->{
 			createTaskService.execute(taskDTO);
 		});
-		final String expectedMessage = "Title cannot be empty";
+		final String expectedMessage = "Titulo não pode ser vazio";
 		Assert.assertTrue(exception.getMessage().contains(expectedMessage));
 	}
 }

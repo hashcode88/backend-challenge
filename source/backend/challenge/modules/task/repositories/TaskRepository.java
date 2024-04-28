@@ -54,6 +54,16 @@ public class TaskRepository implements ITaskRepository {
 	}
 
 	@Override
+	public Task updateProgress(Task task) {
+		taskList.forEach(rawTask -> {
+			if (rawTask.getId().equals(task.getId())){
+				rawTask.setProgress(task.getProgress());
+			}
+		});
+		return task;
+	}
+
+	@Override
 	public void delete(final Long taskId) {
  		// TODO: Criar método responsável por deletar tarefa por id
 

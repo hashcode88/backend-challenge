@@ -1,10 +1,10 @@
 package backend.challenge.modules.task.services;
 
 import backend.challenge.modules.task.dtos.TaskProgressDTO;
-import backend.challenge.modules.task.models.Task;
+import kikaha.urouting.api.DefaultResponse;
 
 public interface IUpdateTaskProgressService {
 
-	Task execute(TaskProgressDTO taskProgressDTO);
+	DefaultResponse execute(TaskProgressDTO taskProgressDTO);
 
 }

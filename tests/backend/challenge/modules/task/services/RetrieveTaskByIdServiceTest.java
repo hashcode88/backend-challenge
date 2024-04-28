@@ -5,8 +5,6 @@ import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.repositories.TaskRepository;
-import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
-import com.sun.source.tree.AssertTree;
 import kikaha.core.test.KikahaRunner;
 import kikaha.urouting.api.DefaultResponse;
 import org.junit.Assert;

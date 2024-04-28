@@ -1,6 +1,8 @@
 package backend.challenge.modules.task.infra.http.controllers;
 
 import backend.challenge.modules.task.dtos.TaskDtoFactory;
+import backend.challenge.modules.task.dtos.TaskProgressDtoFactory;
+import backend.challenge.modules.task.infra.http.views.TaskProgressView;
 import backend.challenge.modules.task.infra.http.views.TaskView;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.services.*;
@@ -19,21 +21,24 @@ public class TaskController {
 	private final IRetrieveAllTasksService retrieveAllTasksService;
 	private final IRetrieveTaskByIdService retrieveTaskByIdService;
 	private final IUpdateTaskService updateTaskService;
+	private final IUpdateTaskProgressService updateTaskProgressService;
 
 	@Inject
 	public TaskController(
-		final ICreateTaskService createTaskService,
-		final IDeleteTaskService deleteTaskService,
-		final IRetrieveAllTasksService retrieveAllTasksService,
-		final IRetrieveTaskByIdService retrieveTaskByIdService,
-		final IUpdateTaskService updateTaskService
-	) {
+            final ICreateTaskService createTaskService,
+            final IDeleteTaskService deleteTaskService,
+            final IRetrieveAllTasksService retrieveAllTasksService,
+            final IRetrieveTaskByIdService retrieveTaskByIdService,
+            final IUpdateTaskService updateTaskService,
+			final IUpdateTaskProgressService updateTaskProgressService
+    ) {
 		this.createTaskService = createTaskService;
 		this.deleteTaskService = deleteTaskService;
 		this.retrieveAllTasksService = retrieveAllTasksService;
 		this.retrieveTaskByIdService = retrieveTaskByIdService;
 		this.updateTaskService = updateTaskService;
-	}
+        this.updateTaskProgressService = updateTaskProgressService;
+    }
 
 	@GET
 	public Response show() {
@@ -70,6 +75,16 @@ public class TaskController {
 		 */
 		return updateTaskService.execute(taskId, task);
     }
+
+	@PUT
+	@Path("progress/single/{taskId}")
+	public Response updateProgress(@PathParam("taskId") Long taskId, TaskProgressView taskProgressView) {
+		/*
+			TODO:  A rota deve alterar apenas o title e description da tarefa
+			 			 que possua o id igual ao id correspondente nos parâmetros da rota.
+		 */
+		return updateTaskProgressService.execute(new TaskProgressDtoFactory().build(taskId, taskProgressView.getProgress()));
+	}
 
 	@DELETE
 	@Path("single/{taskId}")
