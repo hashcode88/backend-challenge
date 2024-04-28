@@ -3,7 +3,7 @@ package backend.challenge.modules.task.services;
 import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
-import backend.challenge.modules.task.services.exceptions.CreateTaskException;
+import kikaha.urouting.api.DefaultResponse;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,8 +19,12 @@ public class CreateTaskService implements ICreateTaskService {
 	}
 
 	@Override
-	public Task execute(TaskDTO taskDTO) throws CreateTaskException {
+	public DefaultResponse execute(TaskDTO taskDTO) {
 		// TODO: Criar serviço responsável por criar uma tarefa
-		return taskRepository.create(taskDTO);
+		Task task = taskRepository.create(taskDTO);
+		if (task == null) {
+			return DefaultResponse.notModified().entity("Titulo não pode ser vazio");
+		}
+		return DefaultResponse.ok().entity(task);
 	}
 }

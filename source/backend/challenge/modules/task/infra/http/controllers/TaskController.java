@@ -6,7 +6,6 @@ import backend.challenge.modules.task.infra.http.views.TaskProgressView;
 import backend.challenge.modules.task.infra.http.views.TaskView;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.services.*;
-import backend.challenge.modules.task.services.exceptions.CreateTaskException;
 import kikaha.urouting.api.*;
 
 import javax.inject.Inject;
@@ -56,14 +55,7 @@ public class TaskController {
 	@POST
 	public Response create(TaskView task) {
 		// TODO: A rota deve receber title e description, sendo o `title` o título da tarefa e `description` uma descrição da tarefa.
-        Task createdTask = null;
-		try {
-			createdTask = createTaskService.execute(new TaskDtoFactory().build(task.getTitle(), task.getDescription()));
-        } catch (CreateTaskException e) {
-			DefaultResponse.badRequest().entity(e.getMessage());
-            throw new RuntimeException(e);
-        }
-		return DefaultResponse.ok().entity(createdTask);
+		return createTaskService.execute(new TaskDtoFactory().build(task.getTitle(), task.getDescription()));
 	}
 
 	@PUT
@@ -90,8 +82,8 @@ public class TaskController {
 	@Path("single/{taskId}")
 	public Response delete(@PathParam("taskId") Long taskId) {
 		// TODO: A rota deve deletar a tarefa com o id correspondente nos parâmetros da rota
-
-		return DefaultResponse.ok().entity("Hello world");
+		deleteTaskService.execute(taskId);
+		return DefaultResponse.ok().entity("Tarefa removida com sucesso");
 	}
 
 }

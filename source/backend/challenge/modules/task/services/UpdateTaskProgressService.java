@@ -28,7 +28,7 @@ public class UpdateTaskProgressService implements IUpdateTaskProgressService{
             return DefaultResponse.notFound().statusCode(404);
         }
         this.changeProgress(retrivedTask, taskProgressDTO.getProgress());
-        this.changeStatus(retrivedTask, taskProgressDTO.getProgress());
+        this.changeStatus(retrivedTask);
         Task updatedTask = taskRepository.updateProgress(retrivedTask);
         return DefaultResponse.ok().entity(updatedTask);
     }
@@ -44,8 +44,8 @@ public class UpdateTaskProgressService implements IUpdateTaskProgressService{
         task.setProgress(taskProgress);
     }
 
-    private void changeStatus(Task task, int progress) {
-        if(progress == LIMIT_PROGRESS) {
+    private void changeStatus(Task task) {
+        if(task.getProgress() == LIMIT_PROGRESS) {
             task.setStatus(TaskStatus.COMPLETE);
         }else {
             task.setStatus(TaskStatus.PROGRESS);

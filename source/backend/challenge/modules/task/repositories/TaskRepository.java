@@ -3,7 +3,6 @@ package backend.challenge.modules.task.repositories;
 import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.models.TaskFactory;
-import backend.challenge.modules.task.services.exceptions.CreateTaskException;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -33,46 +32,38 @@ public class TaskRepository implements ITaskRepository {
 	}
 
 	@Override
-	public Task create(final TaskDTO taskDTO) throws CreateTaskException {
+	public Task create(final TaskDTO taskDTO) {
 		// TODO: Criar método responsável por criar uma tarefa
-		validate(taskDTO);
-		Task task = new TaskFactory().build(taskDTO);
+		Task task = null;
+		if (taskDTO.getTitle().trim().isEmpty()) {
+			return task;
+		}
+		task = new TaskFactory().build(taskDTO);
 		taskList.add(task);
 		return task;
 	}
 
 	@Override
 	public Task update(final Task task) {
-		// TODO: Criar método responsável por atualizar uma tarefa
-		taskList.forEach(rawTask -> {
-			if (rawTask.getId().equals(task.getId())){
-				rawTask.setTitle(task.getTitle());
-				rawTask.setDescription(task.getDescription());
-			}
-		});
-		return task;
+		// TODO: Criar método responsável por atualizar progresso e status da tarefa
+		Task retrivedTask = this.index(task.getId());
+		retrivedTask.setTitle(task.getTitle());
+		retrivedTask.setDescription(task.getDescription());
+		return retrivedTask;
 	}
 
 	@Override
 	public Task updateProgress(Task task) {
-		taskList.forEach(rawTask -> {
-			if (rawTask.getId().equals(task.getId())){
-				rawTask.setProgress(task.getProgress());
-				rawTask.setStatus(task.getStatus());
-			}
-		});
-		return task;
+		Task retrivedTask = this.index(task.getId());
+		retrivedTask.setProgress(task.getProgress());
+		retrivedTask.setStatus(task.getStatus());
+		return retrivedTask;
 	}
 
 	@Override
 	public void delete(final Long taskId) {
  		// TODO: Criar método responsável por deletar tarefa por id
-
-	}
-
-	private static void validate(TaskDTO taskDTO) throws CreateTaskException {
-		if (taskDTO.getTitle().trim().isEmpty()) {
-			throw new CreateTaskException("Titulo não pode ser vazio");
-		}
+		Task task = this.index(taskId);
+		taskList.remove(task);
 	}
 }
