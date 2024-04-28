@@ -23,6 +23,8 @@ public class UpdateTaskService implements IUpdateTaskService {
         if(retrivedTask == null) {
             return DefaultResponse.notFound().statusCode(404);
         }
+        retrivedTask.setTitle(task.getTitle());
+        retrivedTask.setDescription(task.getDescription());
         return DefaultResponse.ok().entity(taskRepository.update(retrivedTask));
     }
 }

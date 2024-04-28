@@ -32,6 +32,9 @@ public class UpdateTaskServiceTest {
 	private final Task taskChanges = new Task();
 	private final Task updatedTask = new Task();
 	private final Long TASK_ID = 8567032865818388301L;
+	private final int TASK_PROGRESS = 50;
+	private final TaskStatus TASK_STATUS = TaskStatus.PROGRESS;
+	private final Date CREATE_AT = new Date(2024, 4, 28);
 	private final String OLD_TASk_TITLE = "Trabalho";
 	private final String OLD_TASk_DESCRIPTION = "Capinar meu terreno";
 
@@ -43,23 +46,23 @@ public class UpdateTaskServiceTest {
 		retrivedTask.setId(TASK_ID);
         retrivedTask.setTitle(OLD_TASk_TITLE);
 		retrivedTask.setDescription(OLD_TASk_DESCRIPTION);
-		retrivedTask.setProgress(50);
-		retrivedTask.setStatus(TaskStatus.PROGRESS);
-		retrivedTask.setCreatedAt(new Date());
+		retrivedTask.setProgress(TASK_PROGRESS);
+		retrivedTask.setStatus(TASK_STATUS);
+		retrivedTask.setCreatedAt(CREATE_AT);
 
 		taskChanges.setId(6714351139364770828L);
 		taskChanges.setTitle("Compras");
 		taskChanges.setDescription("Comprar presente pra minha esposa");
 		taskChanges.setProgress(0);
 		taskChanges.setStatus(TaskStatus.PROGRESS);
-		taskChanges.setCreatedAt(new Date());
+		taskChanges.setCreatedAt(CREATE_AT);
 
 		updatedTask.setId(TASK_ID);
 		updatedTask.setTitle("Compras");
 		updatedTask.setDescription("Comprar presente pra minha esposa");
 		updatedTask.setProgress(50);
 		updatedTask.setStatus(TaskStatus.PROGRESS);
-		updatedTask.setCreatedAt(new Date());
+		updatedTask.setCreatedAt(CREATE_AT);
 	}
 
 	@Test
@@ -71,13 +74,12 @@ public class UpdateTaskServiceTest {
 		when(taskRepository.index(anyLong())).thenReturn(retrivedTask);
 		when(taskRepository.update(anyObject())).thenReturn(updatedTask);
 		final DefaultResponse defaultResponse = updateTaskService.execute(TASK_ID, taskChanges);
-		final Task task = (Task) defaultResponse.entity();
-		Assert.assertEquals(task.getId(), retrivedTask.getId());
-		Assert.assertEquals(task.getProgress(), retrivedTask.getProgress());
-		Assert.assertEquals(task.getStatus(), retrivedTask.getStatus());
-		Assert.assertEquals(task.getCreatedAt(), retrivedTask.getCreatedAt());
-		Assert.assertNotEquals(task.getTitle(), OLD_TASk_TITLE);
-		Assert.assertNotEquals(task.getDescription(), OLD_TASk_DESCRIPTION);
+		Assert.assertEquals(retrivedTask.getId(), TASK_ID);
+		Assert.assertEquals(retrivedTask.getProgress(), TASK_PROGRESS);
+		Assert.assertEquals(retrivedTask.getStatus(), TASK_STATUS);
+		Assert.assertEquals(retrivedTask.getCreatedAt(), CREATE_AT);
+		Assert.assertNotEquals(retrivedTask.getTitle(), OLD_TASk_TITLE);
+		Assert.assertNotEquals(retrivedTask.getDescription(), OLD_TASk_DESCRIPTION);
 
 	}
 
