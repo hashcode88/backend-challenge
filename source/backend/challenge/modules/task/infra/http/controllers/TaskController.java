@@ -5,7 +5,6 @@ import backend.challenge.modules.task.infra.http.views.TaskView;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.services.*;
 import backend.challenge.modules.task.services.exceptions.CreateTaskException;
-import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 import kikaha.urouting.api.*;
 
 import javax.inject.Inject;
@@ -46,11 +45,7 @@ public class TaskController {
 	@Path("single/{taskId}")
 	public Response index(@PathParam("taskId") Long taskId) {
 		// TODO: A rota deve retornar somente a tarefa a qual o id corresponder
-		Task retrivedTask = retrieveTaskByIdService.execute(taskId);
-		if(retrivedTask == null) {
-			return DefaultResponse.notFound().statusCode(404);
-		}
-        return DefaultResponse.ok().entity(retrivedTask);
+        return retrieveTaskByIdService.execute(taskId);
 	}
 
 	@POST

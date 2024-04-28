@@ -8,6 +8,7 @@ import backend.challenge.modules.task.repositories.TaskRepository;
 import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 import com.sun.source.tree.AssertTree;
 import kikaha.core.test.KikahaRunner;
+import kikaha.urouting.api.DefaultResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,9 @@ public class RetrieveTaskByIdServiceTest {
 			 			retornado uma tarefa com o mesmo id informado.
 		*/
 		when(taskRepository.index(TASK_ID)).thenReturn(task);
-		Assert.assertEquals(retrieveTaskByIdService.execute(TASK_ID), task);
+		final DefaultResponse defaultResponse = retrieveTaskByIdService.execute(TASK_ID);
+		Task retrivedTask = (Task) defaultResponse.entity();
+		Assert.assertEquals(task.getId(), retrivedTask.getId());
 	}
 
 }

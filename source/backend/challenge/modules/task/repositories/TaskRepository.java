@@ -4,7 +4,6 @@ import backend.challenge.modules.task.dtos.TaskDTO;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.models.TaskFactory;
 import backend.challenge.modules.task.services.exceptions.CreateTaskException;
-import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;

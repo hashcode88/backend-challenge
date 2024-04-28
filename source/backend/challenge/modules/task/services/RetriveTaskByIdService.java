@@ -3,6 +3,7 @@ package backend.challenge.modules.task.services;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
+import kikaha.urouting.api.DefaultResponse;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,7 +19,11 @@ public class RetriveTaskByIdService implements IRetrieveTaskByIdService {
     }
 
     @Override
-    public Task execute(Long taskId) {
-        return taskRepository.index(taskId);
+    public DefaultResponse execute(Long taskId) {
+        final Task retrivedTask = taskRepository.index(taskId);
+        if(retrivedTask == null) {
+            return DefaultResponse.notFound().statusCode(404);
+        }
+        return DefaultResponse.ok().entity(retrivedTask);
     }
 }

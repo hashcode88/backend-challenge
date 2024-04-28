@@ -4,13 +4,12 @@ import backend.challenge.modules.task.enums.TaskStatus;
 import backend.challenge.modules.task.models.Task;
 import backend.challenge.modules.task.repositories.ITaskRepository;
 import backend.challenge.modules.task.repositories.TaskRepository;
-import backend.challenge.modules.task.services.exceptions.CreateTaskException;
-import backend.challenge.modules.task.services.exceptions.RetriveTaskException;
+
 import kikaha.core.test.KikahaRunner;
 import kikaha.urouting.api.DefaultResponse;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,7 +17,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
