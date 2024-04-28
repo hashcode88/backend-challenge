@@ -38,8 +38,7 @@ public class TaskController {
 	@GET
 	public Response show() {
 		// TODO: Rota que lista todas as tarefas
-
-		return DefaultResponse.ok().entity("Hello world");
+		return DefaultResponse.ok().entity(retrieveAllTasksService.execute());
 	}
 
 	@GET

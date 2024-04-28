@@ -29,8 +29,7 @@ public class TaskRepository implements ITaskRepository {
 	@Override
 	public List<Task> show() {
 		// TODO: Criar método responsável por retornar todas as tarefas
-
-		return null;
+		return taskList;
 	}
 
 	@Override
